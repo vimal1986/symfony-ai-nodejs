@@ -1,5 +1,6 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
+const fs = require('fs')
 const cors = require('cors')
 
 const app = express();
@@ -22,6 +23,17 @@ app.post('/upload', (req, res) => {
         if (err) {
             console.log(err)
             return res.status(500).send({ msg: "fuck eroor" });
+        }
+        // console.log(myFile)
+        if(myFile.mimetype === 'text/plain'){
+            // fs.readFile(myFile, 'utf8', function(err, data) {
+            //     if (err) throw err;
+            //     console.log('OK: ' + myFile);
+            //     console.log(data)
+            //     res.send({data})
+            //   });  
+            let data =myFile.data.toString().split("\n")
+            return res.send({data})            
         }
         return res.send({ file: myFile.name, path: `/${myFile.name}`, ty: myFile.type });
     });
